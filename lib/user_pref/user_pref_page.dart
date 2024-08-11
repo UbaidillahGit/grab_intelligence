@@ -131,9 +131,8 @@ class _UserPreferencesPageState extends State<UserPreferencesPage> {
                       if (isHalal == true && isVegan == true && listOfAlergies.isNotEmpty && listOfAlergies.isNotEmpty) {
                         return _saveUserPref();
                       }
-                      return null;
+                      return;
                     },
-                    // onPressed: () => _saveUserPref(),
                     child: const Text(
                       'Save',
                       style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w300),
@@ -151,7 +150,6 @@ class _UserPreferencesPageState extends State<UserPreferencesPage> {
           });
         },
         swipeableBody: [
-          // SizedBox(height: 10,),
           _widgetHalal(),
           _widgetVeganDiet(),
           _widgetHistoryOfIllness(),

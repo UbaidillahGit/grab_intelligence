@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
     var url = Uri.https('angelhack.gremlinflat.com', '/api/search_restaurants');
 
     var response = await http.get(url);
-    log('_getRestaurants ${response.statusCode} | ${url}');
+    log('_getRestaurants ${response.statusCode} | $url');
     if (response.statusCode == 200) {
       final endDecRes = json.decode(response.body);
       setState(() {

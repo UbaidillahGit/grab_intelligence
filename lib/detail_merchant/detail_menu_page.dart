@@ -72,25 +72,6 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                   ],
                 ),
               ),
-              // child: Container(
-              //   padding: const EdgeInsets.all(10),
-              //   decoration: BoxDecoration(
-              //     color: const Color.fromRGBO(255, 254, 220, 1),
-              //     borderRadius: BorderRadius.circular(10),
-              //     border: Border.all(color: const Color.fromRGBO(236, 239, 238, 1), width: 1),
-              //   ),
-              //   child: const Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Icon(Icons.info_outlined),
-              //       SizedBox(width: 15),
-              //       Text(
-              //         'It might contain diaries',
-              //         style: TextStyle(fontSize: 18),
-              //       ),
-              //     ],
-              //   ),
-              // ),
             ),
             const SizedBox(height: 20),
             Row(

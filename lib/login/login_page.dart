@@ -28,10 +28,6 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     final userCred = await FirebaseAuth.instance.signInWithCredential(credential);
-    // log('_googleSignIn ${googleUser?.id} | accessToken $credential');
-    // log('userCred $userCred');
-      // await prefs.setString('action', 'Start');
-
     if (userCred.credential != null && context.mounted && googleUser != null) {
       _saveUserLocalCahce(googleUser.id, googleUser.displayName ?? '-');
       final usersRefCol = FirebaseFirestore.instance.collection('users');

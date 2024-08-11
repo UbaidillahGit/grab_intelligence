@@ -4,8 +4,6 @@ import 'package:grab_intelligence/home/model_restaurants.dart';
 
 class DetailPageMerchant extends StatefulWidget {
   const DetailPageMerchant({super.key, required this.data});
-  // final String merchantId;
-  // final String merchantName;
   final Data data;
 
   @override
