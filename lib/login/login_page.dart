@@ -64,21 +64,34 @@ class _LoginPageState extends State<LoginPage> {
       color: Colors.white,
       child: Column(
         children: [
-          const SizedBox(height: 30),
+          const SizedBox(height: 50),
           Image.asset('assets/logo/grab_logo.png'),
           const SizedBox(height: 30),
           Image.asset('assets/images/login_banner.png'),
           const SizedBox(height: 20),
           const Text(
             'Transform Your',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
-          const Text('Plate Wellness'),
-          const SizedBox(height: 20),
-          ElevatedButton(
-          onPressed: () => _googleSignIn(context),
-          child: const Text('SignIn with Google'),
-        )
+          const Text('Plate Wellness',style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w400
+          ),),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromRGBO(0, 180, 94, 1),
+                minimumSize: const Size(double.maxFinite, 50),
+              ),
+              onPressed: () => _googleSignIn(context),
+              child: const Text(
+                'SignIn with Google',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
         ],
       ),
     );

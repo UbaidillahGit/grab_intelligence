@@ -29,15 +29,21 @@ class _SplashPageState extends State<SplashPage> {
 
   void _routingBySession(String? uid) {
     if (uid == null) {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const LoginPage(),
-      ));
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const LoginPage(),
+        ),
+        (route) => false,
+      );
     }
 
     if (uid != null) {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const HomePage(),
-      ),);
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ),
+        (route) => false,
+      );
     }
   }
 

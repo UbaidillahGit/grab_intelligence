@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:grab_intelligence/detail_merchant/detail_merch_page.dart';
 import 'package:grab_intelligence/home/model_restaurants.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ModelRestaurants? listOfRestaurants;
-  String userName = 'User';
+  String userName = 'Joselyn';
   String? userId;
 
   @override
@@ -34,10 +34,10 @@ class _HomePageState extends State<HomePage> {
   }  
 
   void _getRestaurants() async {
-    var url = Uri.https('angelhack.gremlinflat.com', '/api/list_restaurants');
+    var url = Uri.https('angelhack.gremlinflat.com', '/api/search_restaurants');
 
     var response = await http.get(url);
-
+    log('_getRestaurants ${response.statusCode} | ${url}');
     if (response.statusCode == 200) {
       final endDecRes = json.decode(response.body);
       setState(() {
@@ -45,7 +45,6 @@ class _HomePageState extends State<HomePage> {
       });
     }
 
-    log('response ${listOfRestaurants}');
   }
 
   @override
@@ -85,7 +84,6 @@ class _HomePageState extends State<HomePage> {
                 suffixIcon: IconButton(
                   onPressed: () {
                     _getRestaurants();
-                    log('search ');
                   },
                   icon: const Icon(Icons.search),
                 ),
@@ -111,15 +109,24 @@ class _HomePageState extends State<HomePage> {
             itemCount: listOfRestaurants?.data?.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.8,
+              childAspectRatio: 0.65,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
             itemBuilder: (context, index) {
               final itemName = listOfRestaurants!.data?[index].name ?? '-';
               final itemImage = listOfRestaurants?.data?[index].imageUrl;
+              // final itemIsHealthy = listOfRestaurants?.data?[index].isOk;
+              final itemIsHealthy = index < 2;
+              final itemPriceRange = listOfRestaurants?.data?[index].priceRange;
               return GestureDetector(
-                onTap: (() {}),
+                onTap: (() => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => DetailPageMerchant(
+                          data: listOfRestaurants!.data![index],
+                        ),
+                      ),
+                    )),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -139,16 +146,20 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             SizedBox(
                               width: 130,
+                              height: 50,
                               child: Text(
                                 itemName,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold,),
                               ),
                             ),
-                            Image.asset(
-                              'assets/logo/healthy_check.png',
-                              scale: 1.5,
-                            )
+                            if(itemIsHealthy == true)...[
+                              const SizedBox(width: 5),
+                              Image.asset(
+                                'assets/logo/healthy_check.png',
+                                scale: 1.5,
+                              )
+                            ]
                           ],
                         ),
                       ),
@@ -156,8 +167,27 @@ class _HomePageState extends State<HomePage> {
                         width: 150,
                         child: Divider(),
                       ),
-                      // Icon(Icons.price)
-                      // Text('${listOfRestaurants!.data![index].priceRange}'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if(itemPriceRange == 'Inxpensive')...[
+                            const Icon(Icons.attach_money_rounded, color: Colors.green),
+                            const Icon(Icons.attach_money_rounded, color: Colors.grey),
+                            const Icon(Icons.attach_money_rounded, color: Colors.grey)
+                          ],
+                          if(itemPriceRange == 'Moderately Expensive')...[
+                            const Icon(Icons.attach_money_rounded, color: Colors.green),
+                            const Icon(Icons.attach_money_rounded, color: Colors.green),
+                            const Icon(Icons.attach_money_rounded, color: Colors.grey)
+                          ],
+
+                          if(itemPriceRange == 'Expensive')...[
+                            const Icon(Icons.attach_money_rounded, color: Colors.green),
+                            const Icon(Icons.attach_money_rounded, color: Colors.green),
+                            const Icon(Icons.attach_money_rounded, color: Colors.green)
+                          ],
+                        ],
+                      )
                     ],
                   ),
                 ),

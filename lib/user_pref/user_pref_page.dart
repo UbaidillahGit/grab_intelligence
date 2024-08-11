@@ -3,9 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grab_intelligence/home/home_page.dart';
-import 'package:grab_intelligence/user_pref/overview.dart';
 import 'package:onboarding/onboarding.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class UserPreferencesPage extends StatefulWidget {
@@ -77,16 +75,7 @@ class _UserPreferencesPageState extends State<UserPreferencesPage> {
     );
   }
 
-  _getUserLocalUID() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final uid = prefs.getStringList('uid');
-    // log('_saveUserLocalCahce $uid');
-
-    return uid;
-  }
-
   void _saveUserPref() async {
-    // final FirebaseFirestore _firestore;
     final restaurantRefCol = FirebaseFirestore.instance.collection('users').doc(widget.uid);
     final payload = {
       'isHalal': isHalal,
@@ -96,7 +85,6 @@ class _UserPreferencesPageState extends State<UserPreferencesPage> {
     };
     restaurantRefCol.set(payload, SetOptions(merge: true));
     final res = await restaurantRefCol.get();
-    // log('_saveData ${listOfIllness.toList()}')
 
     if (res.exists) {
       _navigateToHome();
@@ -121,39 +109,38 @@ class _UserPreferencesPageState extends State<UserPreferencesPage> {
         buildFooter: (context, netDragDistance, pagesLength, currentIndex, setIndex, slideDirection) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: AnimatedSmoothIndicator(
-                    activeIndex: _onBoardingIdx,
-                    count: 4,
-                    effect: const WormEffect(activeDotColor: Color.fromRGBO(0, 180, 94, 1)),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Center(
+                    child: AnimatedSmoothIndicator(
+                      activeIndex: _onBoardingIdx,
+                      count: 4,
+                      effect: const WormEffect(activeDotColor: Color.fromRGBO(0, 180, 94, 1)),
+                    ),
                   ),
-                ),
-                // const Spacer(),
-                const SizedBox(width: 50),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(0, 180, 94, 1),
-                    elevation: 0,
-                  ),
-                  onPressed: () {
-                    _saveUserPref();
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) {
-                    //       return const UserPreferencesOverview();
-                    //     },
-                    //   ),
-                    // );
-                  },
-                  child: const Text(
-                    'Next',
-                    style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w300),
-                  ),
-                )
-              ],
+                  const SizedBox(width: 50),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(0, 180, 94, 1),
+                      elevation: 0,
+                    ),
+                    onPressed: () {
+                      if (isHalal == true && isVegan == true && listOfAlergies.isNotEmpty && listOfAlergies.isNotEmpty) {
+                        return _saveUserPref();
+                      }
+                      return null;
+                    },
+                    // onPressed: () => _saveUserPref(),
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w300),
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         },
@@ -163,8 +150,13 @@ class _UserPreferencesPageState extends State<UserPreferencesPage> {
             _onBoardingIdx = currentIndex;
           });
         },
-        // buildFooter: ,
-        swipeableBody: [_widgetHalal(), _widgetVeganDiet(), _widgetHistoryOfIllness(), _widgetFoodAlergies()],
+        swipeableBody: [
+          // SizedBox(height: 10,),
+          _widgetHalal(),
+          _widgetVeganDiet(),
+          _widgetHistoryOfIllness(),
+          _widgetFoodAlergies(),
+        ],
       ),
     );
   }
@@ -175,7 +167,7 @@ class _UserPreferencesPageState extends State<UserPreferencesPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: 40),
           Image.asset('assets/logo/grab_logo.png'),
           const SizedBox(height: 30),
           // Image.asset('assets/images/login_banner.png'),
@@ -253,11 +245,11 @@ class _UserPreferencesPageState extends State<UserPreferencesPage> {
 
   Widget _widgetVeganDiet() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: 40),
           Image.asset('assets/logo/grab_logo.png'),
           const SizedBox(height: 30),
           // Image.asset('assets/images/login_banner.png'),
@@ -335,7 +327,7 @@ class _UserPreferencesPageState extends State<UserPreferencesPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: 40),
           Image.asset('assets/logo/grab_logo.png'),
           const SizedBox(height: 30),
           const SizedBox(height: 20),
@@ -496,7 +488,7 @@ class _UserPreferencesPageState extends State<UserPreferencesPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: 40),
           Image.asset('assets/logo/grab_logo.png'),
           const SizedBox(height: 30),
           // Image.asset('assets/images/login_banner.png'),
